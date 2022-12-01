@@ -1,42 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reclamation index{% endblock %}
-
 {% block body %}
-    <h1>Reclamation index</h1>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Liste Mes Reclamations</h3>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>IdReclamation</th>
-                <th>Message</th>
-                <th>DateReclamation</th>
-                <th>ObjetReclamation</th>
-                <th>EtatReclamation</th>
+            </div>
+        </div><!-- /.box-header -->
+        <a class="tg-btn" href="{{ path('app_reclamation_pdf')}}"> pdf 🗄️</a>
 
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for reclamation in reclamations %}
-            <tr>
-                <td>{{ reclamation.idReclamation }}</td>
-                <td>{{ reclamation.message }}</td>
-                <td>{{ reclamation.dateReclamation }}</td>
-                <td>{{ reclamation.objetReclamation }}</td>
-                <td>{{ reclamation.etatReclamation }}</td>
-                <td>
-                    <a href="{{ path('app_reclamation_show', {'idReclamation': reclamation.idReclamation}) }}">show</a>
-                    <a href="{{ path('app_reclamation_edit', {'idReclamation': reclamation.idReclamation}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="box-body table-responsive no-padding">
 
-    <a href="{{ path('app_reclamation_new') }}">Create new</a>
+            <table id="t" class="table table-hover">
+                <tbody id="all"><tr>
+
+                    <th>Objet Reclamation</th>
+                    <th>Message</th>
+                    <th>Date Reclamation</th>
+                    <th>Etat Reclamation</th>
+                </tr>
+                <tbody>
+                {% for reclamation in reclamations %}
+                    <tr>
+
+                        <td>{{ reclamation.objetReclamation }}</td>
+                        <td>{{ reclamation.message }}</td>
+                        <td>{{ reclamation.dateReclamation }}</td>
+
+                        <td>{{ reclamation.etatReclamation }}</td>
+
+
+                        <td>
+                            <a href="{{ path('app_reclamation_show', {'idReclamation': reclamation.idReclamation}) }}">show</a>
+                            <a href="{{ path('app_reclamation_edit', {'idReclamation': reclamation.idReclamation}) }}">edit</a>
+
+
+
+
+                        </td>
+
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+            <a href="{{ path('app_reclamation_new') }}">Create new</a>
+            <!-- End Default Table Example -->
+
+        </div>
+    </div>
+    </div>
+    </div>
+
+
 {% endblock %}
+

@@ -1,0 +1,60 @@
+{% block body %}
+
+    <div class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-md-12">
+    <div class="card">
+    <div class="card-header card-header-primary">
+        <h1 align="center" style="color:blue;">Reclamations</h1>
+        <h2  align="center"style="color:orange;" > List of Reclamations </h2>
+    </div>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            #reclamations {
+                font-family: Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            #reclamations td, #reclamations th {
+                border: 1px solid #ddd;
+
+            }
+            #reclamations tr:nth-child(even){background-color: #f2f2f2;}
+            #reclamations tr:hover {background-color: #ddd;}
+            #reclamations th {
+                padding-top: 15px;
+                padding-bottom: 1px;
+                text-align: left;
+                background-color: royalblue;
+                color: white;
+            }
+        </style>
+    </head>
+<body>
+
+<table id="reclamations">
+
+    <tr>
+        <th>ObjetReclamation</th>
+        <th>Message</th>
+        <th>DateReclamation</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for reclamation in reclamation %}
+        <tr>
+            <td>{{ reclamation.objetReclamation }}</td>
+            <td>{{ reclamation.message }}</td>
+            <td>{{ reclamation.dateReclamation }}</td>
+
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

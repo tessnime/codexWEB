@@ -1,0 +1,208 @@
+{% extends 'base2.html.twig' %}
+
+{% block body %}
+   
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Liste des Reclamations</h3>
+            
+            <div class="box-tools">
+                <div class="input-group">
+
+                    <div id="divs">
+                        <input type="text" id="search" placeholder="recherche par sujet 🔍">
+                        <input type="text" id="search2" placeholder="recherche par status 🔍">
+                        <a class="tg-btn" href="" id="idup">UP ⬆️</a>
+                        <a class="tg-btn" href="" id="iddown">DOWN ⬇️</a>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+            <a class="tg-btn" href="{{ path('reclamation_stat') }}"> statistique Reclamation 📈</a>
+            <table class="table table-hover" id="t">
+               <tr>
+                    <th>Id Reclamation</th>
+                    <th>Objet Reclamation</th>
+                    <th>Message</th>
+                    <th>Date Reclamation</th>
+                    <th>Etat Reclamation</th>
+                </tr>
+
+                <tbody id="all">
+                {% for reclamation in reclamations %}
+                    <tr>
+                        <td>{{ reclamation.idReclamation }}</td>
+                        <td>{{ reclamation.objetReclamation }}</td>
+                        <td>{{ reclamation.message }}</td>
+                        <td>{{ reclamation.dateReclamation }}</td>
+
+                        <td>{{ reclamation.etatReclamation }}</td>
+
+
+                        <td>
+                            <a href="{{ path('app_reclamation_show', {'idReclamation': reclamation.idReclamation}) }}">show</a>
+                            <a href="{{ path('app_reclamation_edit', {'idReclamation': reclamation.idReclamation}) }}">edit</a>
+                            <a href="{{ path('app_reclamation_email', {'idReclamation': reclamation.idReclamation}) }}">reply</a>
+
+
+
+
+                        </td>
+
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+                <tbody id="search">
+                </tbody>
+            </table>
+
+            <!-- End Default Table Example -->
+
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script>
+
+
+
+
+
+        $( document ).ready(function() {
+            /*begin rechercher avancee multicritéres selon sujet et staus*/
+            $("#divs").keyup(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                var value2 = $("#search2").val();
+                if(value.length >= 2 || value.length == 0 || value2.length >= 2 || value2.length == 0  )
+                {
+                    //    alert(value);
+                    /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                    $.ajax({
+                        /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                        url : "{{ path('search_rec') }}",
+                        /* La méthode utilisée pour transférer les données est GET */
+                        type : 'GET',
+                        /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                        data: {
+                            'searchValue' : value,
+                            'searchValue2': value2
+                        },
+                        /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                        success : function(retour){
+                            if(retour){
+                                $('#t tbody#search').empty();
+                                $.each(JSON.parse(retour), function(i, obj) {
+                                    $('#t tbody#all').hide();
+                                    //     $('#t tbody#search').append('<tr><td> '+obj.idrec+'  </td><td>    '+obj.sujetrec+'  </td><td>'+obj.descriptionrec+' </td><td>'+obj.statusrec+' </td> <td>'+obj.daterec.substring(0,10) +' </td> <td>'+obj.datetraitement+' </td> <td>'+obj.nomprenomcoach+' </td> <td>'+obj.imgrec+' </td> <td> <a href="/reclamation/'+obj.idrec+'/edit">edit</a></td></tr>');
+                                    $('#t tbody#search').append('<tr><td> '+obj.idReclamation+'  </td><td>    '+obj.objetReclamation+'  </td><td>'+obj.message+'</td> <td>'+obj.dateReclamation.substring(0,10)+' </td><td>'+obj.etatReclamation+' </td> <td>'+' </td> <td> <a href="/reclamation/'+obj.idrec+'/edit">🖊️</a></td>   </tr>');
+                                });
+                            }
+                            else
+                            {
+
+                                $('#t tbody#all').show();
+                                $('#t tbody#search').empty();
+                                $('#t tbody#search').fadeIn('fast');
+
+                            }
+                        },
+                    });
+                    return false;
+                }
+            });
+
+            /*end rechercher avancee multicritéres selon sujet et staus*/
+            /*begin trie up selon id*/
+            $("#idup").click(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                var value2 = $("#search2").val();
+                var value3 ="ASC";
+                //    alert(value);
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                    url : "{{ path('search_rec') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type : 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue' : value,
+                        'searchValue2': value2,
+                        'orderid': value3
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                    success : function(retour){
+                        if(retour){
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(retour), function(i, obj) {
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append('<tr><td> '+obj.idReclamation+'  </td><td>    '+obj.objetReclamation+'  </td><td>'+obj.message+'</td> <td>'+obj.dateReclamation.substring(0,10)+' </td><td>'+obj.etatReclamation+' </td> <td>'+' </td> <td> <a href="/reclamation/'+obj.idrec+'/edit">🖊️</a></td>   </tr>');
+                            });
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+
+            });
+            /*end trie up selon id*/
+            /*begin trie down selon id*/
+            $("#iddown").click(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                var value2 = $("#search2").val();
+                var value3 ="DESC";
+                //    alert(value);
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                    url : "{{ path('search_rec') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type : 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue' : value,
+                        'searchValue2': value2,
+                        'orderid': value3
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                    success : function(retour){
+                        if(retour){
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(retour), function(i, obj) {
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append('<tr><td> '+obj.idReclamation+'  </td><td>    '+obj.objetReclamation+'  </td><td>'+obj.message+'</td> <td>'+obj.dateReclamation.substring(0,10)+' </td><td>'+obj.etatReclamation+' </td> <td>'+' </td> <td> <a href="/reclamation/'+obj.idrec+'/edit">🖊️</a></td>   </tr>');
+                            });
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+
+            });
+            /*end trie down selon id*/
+        });
+    </script>
+
+
+    
+
+
+{% endblock %}

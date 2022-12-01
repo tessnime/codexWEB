@@ -5,7 +5,8 @@ namespace App\Repository;
 use App\Entity\Reclamation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use App\Entity\Locations;
+use Doctrine\DBAL\DBALException;
 /**
  * @extends ServiceEntityRepository<Reclamation>
  *
@@ -36,8 +37,41 @@ class ReclamationRepository extends ServiceEntityRepository
 
         if ($flush) {
             $this->getEntityManager()->flush();
-        }
+        }}
+
+
+    public function find_Nb_Rec_Par_Status($status){
+
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT DISTINCT  count(r.idReclamation) FROM   App\Entity\Reclamation r  where r.etatReclamation = :status   '
+        );
+        $query->setParameter('status', $status);
+        return $query->getResult();
     }
+
+
+    public function findReclamationsBySujet($sujet,$status,$order){
+        $em = $this->getEntityManager();
+        if($order=='DESC') {
+            $query = $em->createQuery(
+                'SELECT r FROM App\Entity\Reclamation r   where r.objetReclamation like :suj  and r.etatReclamation like :status order by r.idReclamation DESC '
+            );
+            $query->setParameter('suj', $sujet . '%');
+            $query->setParameter('status', $status . '%');
+        }
+        else{
+            $query = $em->createQuery(
+                'SELECT r FROM App\Entity\Reclamation r   where r.objetReclamation like :suj  and r.etatReclamation like :status order by r.idReclamation ASC '
+            );
+            $query->setParameter('suj', $sujet . '%');
+            $query->setParameter('status', $status . '%');
+        }
+        return $query->getResult();
+    }
+
+
 
 //    /**
 //     * @return Reclamation[] Returns an array of Reclamation objects
@@ -63,13 +97,6 @@ class ReclamationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-public function recupererTypeRec($id)
-{
-    $entityManager=$this->getEntityManager();
-    $query=$entityManager
-    ->createQuery("SELECT r FROM App\Entity\Reclamation r JOIN categorie c where c.id=:id_reclamation;")
-    ->setParameter('id',$id);
-    return$query->getResult(); 
-}
+
 
 }

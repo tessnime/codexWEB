@@ -80,7 +80,7 @@
     <section id="navstart" class="sec navstart"><!-- Navbar Start -->
 
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm px-5 py-3 py-lg-0">
-            <a href="base.html.twig" class="navbar-brand p-0">
+            <a href="{{ path('app_base') }}" class="navbar-brand p-0">
                 <h1 class="m-0 text-primary"><i class="fa fa-tooth me-2"></i>Medicanet</h1>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -88,7 +88,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
-                    <a href="{{ path('app_reclamation_new') }}" class="nav-item nav-link active">Home</a>
+                    <a href="{{ path('app_base') }}" class="nav-item nav-link active">Home</a>
                     <a href="{{ path('app_reclamation_new') }}" class="nav-item nav-link">Reclamation</a>
                   
                     <a href="service.html.twig" class="nav-item nav-link">Service</a>

@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Reclamation{% endblock %}
 
 {% block body %}
@@ -27,6 +28,9 @@
                 <th>EtatReclamation</th>
                 <td>{{ reclamation.etatReclamation }}</td>
             </tr>
+
+
+
         </tbody>
     </table>
 
@@ -34,5 +38,7 @@
 
     <a href="{{ path('app_reclamation_edit', {'idReclamation': reclamation.idReclamation}) }}">edit</a>
 
+
     {{ include('reclamation/_delete_form.html.twig') }}
+
 {% endblock %}

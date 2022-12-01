@@ -7,15 +7,18 @@ use App\Repository\ReclamationRepository;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups ;
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
 {
+    #[Groups("posts:read")]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $idReclamation = null;
 
+    #[Groups("posts:read")]
     #[ORM\Column(length: 255)]
     #[Assert\Length(
         min: 10,
@@ -25,9 +28,12 @@ class Reclamation
     )]
     private ?String $message = null;
 
+    #[Groups("posts:read")]
     #[ORM\Column(length: 255)]
+    #[Assert\Date(message: "verifier le format de la date YYYY-MM-DD")]
     private ?String $dateReclamation = null;
 
+    #[Groups("posts:read")]
     #[ORM\Column(length: 255)]
     #[Assert\Length(
         min: 10,
@@ -37,8 +43,10 @@ class Reclamation
     )]
     private ?String $objetReclamation = null;
 
+    #[Groups("posts:read")]
     #[ORM\Column(length: 255)]
     private ?String $etatReclamation = 'non traité';
+
 
     #[ORM\ManyToOne(inversedBy: 'reclamations')]
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
@@ -127,6 +135,10 @@ class Reclamation
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->idReclamation ;
+    }
    
 
    
